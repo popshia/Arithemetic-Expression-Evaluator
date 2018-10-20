@@ -54,11 +54,12 @@ void InfixToPostfix( char * infix, char * postfix ) {
             // cout << stack[top] << " " << infix[i] << endl ;
             while ( Priority( stack[top] ) >= Priority( infix[i]) ) { // check the priority
                 // cout << "while in" << endl ;
-                postfix[j++] = stack[top--] ;
-                Postfix -> ch = postfix[j++] ;
+                //postfix[j++] = stack[top--] ;
+                Postfix -> ch = stack[top] ;
                 //cout << Postfix -> ch << endl ;
                 Postfix -> next = new postfixPtr;
                 Postfix = Postfix -> next;
+                top -- ;
             } // while()
             stack[++top] = infix[i] ; // save to stack
             // cout << stack[top] << endl ;
