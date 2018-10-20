@@ -66,11 +66,12 @@ void InfixToPostfix( char * infix, char * postfix ) {
         case ')' :
             while ( stack[top] != '(' ) {
                 // cout << "while in" << endl ;
-                postfix[j++] = stack[top--] ; // get the previous bracket and output to postfix array
-                Postfix -> ch = postfix[j++] ;
+                // postfix[j++] = stack[top--] ; // get the previous bracket and output to postfix array
+                Postfix -> ch = stack[top] ;
                 //cout << Postfix -> ch << endl ;
                 Postfix -> next = new postfixPtr ;
                 Postfix = Postfix -> next ;
+                top -- ;
             } // while()
             top -- ; // minus the top
             break ;
@@ -106,8 +107,8 @@ void InfixToPostfix( char * infix, char * postfix ) {
     Postfix = head ;
     
     while( Postfix -> next != NULL ) {
-        if ( Postfix -> num != -1 ) cout << Postfix -> num << " , " ;
-        if ( Postfix -> ch != '\0' ) cout << Postfix -> ch << " , " ;
+        if ( Postfix -> num != -1 ) cout << Postfix -> num << ", " ;
+        if ( Postfix -> ch != '\0' ) cout << Postfix -> ch << ", " ;
         //cout << Postfix->num << " " << Postfix->ch << endl ;
         Postfix = Postfix -> next ;
     } // while
