@@ -32,7 +32,7 @@ double Calculate( char oPerator, double num1, double num2 ) {
     } // switch between operators
 } // calculate the numbers
 
-void InfixToPostfix( char * infix, char * postfix ) {
+postfixPtr* InfixToPostfix( char * infix, char * postfix ) {
     char stack[MAX] = {'\0'} ;
     int i = 0 ;
     int j = 0 ;
@@ -57,8 +57,8 @@ void InfixToPostfix( char * infix, char * postfix ) {
                 //postfix[j++] = stack[top--] ;
                 Postfix -> ch = stack[top] ;
                 //cout << Postfix -> ch << endl ;
-                Postfix -> next = new postfixPtr;
-                Postfix = Postfix -> next;
+                Postfix -> next = new postfixPtr ;
+                Postfix = Postfix -> next ;
                 top -- ;
             } // while()
             stack[++top] = infix[i] ; // save to stack
@@ -113,27 +113,44 @@ void InfixToPostfix( char * infix, char * postfix ) {
         //cout << Postfix->num << " " << Postfix->ch << endl ;
         Postfix = Postfix -> next ;
     } // while
+    
+    Postfix = head ;
+    return Postfix ;
 } // change the infix expression to postfix expression
 
 double Evaluate( char * infix ) {
     char postfix[MAX]= {'\0'} ;
-    char operand[2] = {'\0'} ;
+    //char operand[2] = {'\0'} ;
     double stack[MAX] = {0.0} ;
+    postfixPtr* calPointer = NULL ;
     
-    InfixToPostfix( infix, postfix ) ; // change infix 2 postfix
+    calPointer = InfixToPostfix( infix, postfix ) ; // change infix 2 postfix
     
     int top = 0 ;
-    int i = 0 ;
-    for ( top = 0, i = 0 ; postfix[i] != '\0' ; i++ ) switch( postfix[i] ) {
+    while ( calPointer -> next != NULL ) {
+        if ( calPointer->ch != '\0' ) { // operand situation
+            stack[top-1] = Calculate( calPointer->ch, stack[top-1], stack[top] ) ;
+            top -- ;
+        } // calculate
+        else if ( calPointer->num != -1 ) { // number situation
+            // operand[0] = char(calPointer->num) ;
+            // cout << static_cast<double>(calPointer->num) << endl ;
+            stack[++top] = static_cast<double>(calPointer->num) ;
+        } // save number into stack
+        calPointer = calPointer->next ;
+    } // check if it's a operand or number and calculate
+    
+    /* for ( top = 0, i = 0 ; postfix[i] != '\0' ; i++ ) switch( postfix[i] ) {
         case '+': case '-' : case '*' : case '/' :
-            stack[top - 1] = Calculate( postfix[i], stack[top - 1], stack[top] ) ;
+            stack[top-1] = Calculate( postfix[i], stack[top - 1], stack[top] ) ;
             top -- ;
             break ;
         default:
             operand[0] = postfix[i] ;
             stack[++top] = atof(operand) ;
-    } // check if it's a operand or number and calculate
+    } // check if it's a operand or number and calculate */
     
+    // cout << stack[top] << endl ;
     return stack[top];
 } // evaluate the postfix one by one
 
